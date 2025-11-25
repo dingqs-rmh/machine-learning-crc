@@ -1,0 +1,112 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LassoCV
+from sklearn.metrics import accuracy_score, roc_auc_score, classification_report, roc_curve, auc, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.preprocessing import StandardScaler
+from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import StratifiedKFold
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+import shap
+from sklearn.metrics import precision_score, recall_score, f1_score
+import os
+import joblib
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+
+# 设置全局字体为“Times New Roman”，并调整默认字体大小和加粗选项
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 12  # 全局字体大小
+plt.rcParams['axes.titlesize'] = 14  # 标题字体大小
+plt.rcParams['axes.labelsize'] = 12  # 坐标轴标签字体大小
+plt.rcParams['axes.titleweight'] = 'bold'  # 标题加粗
+plt.rcParams['axes.labelweight'] = 'bold'  # 坐标轴标签加粗
+
+# 读取数据
+coad_data = pd.read_csv('/home/xkj/project/TMB/data/COAD_TMB.csv')
+read_data = pd.read_csv('/home/xkj/project/TMB/data/READ_TMB.csv')
+
+# 合并数据集
+data = pd.concat([coad_data, read_data], axis=0)
+
+# 提取特征名
+feature_names = data.columns[1:]
+
+# 对数变换（log2(TPM + 1)）
+data.iloc[:, 1:] = np.log2(data.iloc[:, 1:] + 1)
+
+# 设置阈值，将TMB分类为高（1）或低（0）
+threshold = 10
+y = (data.iloc[:, 0] > threshold).astype(int)  # 高TMB为1，低TMB为0
+
+# 分离特征
+X = data.iloc[:, 1:]  # 所有基因表达数据
+
+# 创建SMOTE实例
+smote = SMOTE(random_state=42)
+
+# LASSO特征选择
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+lasso = LassoCV(cv=5, random_state=42)
+lasso.fit(X_scaled, y)
+
+# 选择非零系数的特征
+selected_features = np.where(lasso.coef_ != 0)[0]
+X_selected = X_scaled[:, selected_features]
+#X_selected = X.iloc[:, selected_features]
+selected_feature_names = feature_names[selected_features]
+
+# 使用RFE选择最重要的特征
+rfe_model = RandomForestClassifier(random_state=2024)
+rfe = RFE(estimator=rfe_model, n_features_to_select=50)
+X_rfe_selected = rfe.fit_transform(X_selected, y)
+
+# 保留RFE选择的特征名
+rfe_selected_feature_names = selected_feature_names[rfe.support_]
+X_selected_final = X[rfe_selected_feature_names]
+
+# 标准化选择的特征
+scaler_selected = StandardScaler()
+X_selected_scaled = scaler_selected.fit_transform(X_selected_final)
+
+# SMOTE
+X_resampled, y_resampled = smote.fit_resample(X_selected_scaled, y)
+
+# 训练随机森林
+best_model = RandomForestClassifier(random_state=42)
+best_model.fit(X_resampled, y_resampled)
+
+
+# 保存模型和选择的特征
+model_output_path = '/home/xkj/project/TMB/models/best_random_forest_model.pkl'
+features_output_path = '/home/xkj/project/TMB/models/selected_features.csv'
+scaler_output_path = '/home/xkj/project/TMB/models/scaler_selected.pkl'
+shap_pdf_path = '/home/xkj/project/TMB/models/shap_summary_plot.pdf'
+
+joblib.dump(best_model, model_output_path)
+selected_features_df = pd.DataFrame(rfe_selected_feature_names, columns=['Selected Features'])
+selected_features_df.to_csv(features_output_path, index=False)
+
+# 保存标准化模型
+joblib.dump(scaler_selected, scaler_output_path)
+
+# 计算SHAP值并保存
+explainer = shap.TreeExplainer(best_model)
+shap_values = explainer.shap_values(X_selected_scaled)
+
+# 生成SHAP summary plot并保存为PDF
+with PdfPages(shap_pdf_path) as pdf:
+    plt.figure()
+    shap.summary_plot(shap_values[1], X_selected_scaled, feature_names=rfe_selected_feature_names, show=False)
+    plt.title("SHAP Summary Plot")
+    pdf.savefig()  # 保存当前图
+    plt.close()
+
+print(f"模型已保存到：{model_output_path}")
+print(f"选择的特征已保存到：{features_output_path}")
+print(f"标准化模型已保存到：{scaler_output_path}")
+print(f"SHAP summary plot已保存到：{shap_pdf_path}")
