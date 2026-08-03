@@ -1,0 +1,66 @@
+Sample	OS.time(Month)	OS	DFS.time(Month)	DFS
+GSM734111	52.86	0	52.86	no recurrence
+GSM734112	54.9	1	54.9	no recurrence
+GSM734113	74.07	0	24.85	recurrence
+GSM734114	59.34	0	59.34	no recurrence
+GSM734115	32.67	0	17.32	recurrence
+GSM734116	38.72	1	38.72	no recurrence
+GSM734117	42.27	0	13.08	recurrence
+GSM734118	8.94	1	8.94	no recurrence
+GSM734119	5.12	1	NA	NA
+GSM734120	47.86	0	47.86	no recurrence
+GSM734121	78.87	0	64.33	no recurrence
+GSM734122	105.17	0	105.17	no recurrence
+GSM734123	47.8	1	47.8	no recurrence
+GSM734124	6.11	1	5.35	recurrence
+GSM734125	20.44	1	20.44	no recurrence
+GSM734126	85.61	0	85.61	no recurrence
+GSM734127	59.07	1	59.07	no recurrence
+GSM734128	85.93	1	79.46	recurrence
+GSM734129	19.03	1	8.58	recurrence
+GSM734130	4.96	1	NA	NA
+GSM734131	5.72	1	NA	NA
+GSM734132	95.07	0	82.61	no recurrence
+GSM734133	28.89	1	NA	NA
+GSM734134	18.54	1	NA	NA
+GSM734135	34.02	1	NA	NA
+GSM734136	1.44	1	NA	NA
+GSM734137	31.85	0	NA	NA
+GSM734138	60.75	0	55.19	no recurrence
+GSM734139	15.25	1	NA	NA
+GSM734140	14.56	1	NA	NA
+GSM734141	9.96	1	9.96	no recurrence
+GSM734142	22.35	0	NA	NA
+GSM734143	52.5	1	52.5	no recurrence
+GSM734144	88.99	0	88.99	no recurrence
+GSM734145	55.33	0	55.33	no recurrence
+GSM734146	37.31	1	37.31	no recurrence
+GSM734147	63.25	0	63.25	no recurrence
+GSM734148	61.57	0	61.57	no recurrence
+GSM734149	34.09	0	24.19	no recurrence
+GSM734150	59.96	0	59.96	no recurrence
+GSM734151	58.45	0	46.71	no recurrence
+GSM734152	37.67	0	17.95	no recurrence
+GSM734153	120.62	0	27.64	recurrence
+GSM734154	25.24	0	25.24	no recurrence
+GSM734155	44.97	0	44.97	no recurrence
+GSM734156	35.9	0	35.9	no recurrence
+GSM734157	26.66	0	26.66	no recurrence
+GSM734158	83.99	0	22.38	recurrence
+GSM734159	15.05	0	15.05	no recurrence
+GSM734160	27.15	1	27.15	no recurrence
+GSM734161	52.24	0	52.24	no recurrence
+GSM734162	67.82	0	67.82	no recurrence
+GSM734163	55.13	0	55.13	no recurrence
+GSM734164	36.59	0	23.96	no recurrence
+GSM734165	65.88	1	65.88	no recurrence
+GSM734166	59.53	0	59.53	no recurrence
+GSM734167	3.64	0	3.64	no recurrence
+GSM734168	99.51	0	99.51	no recurrence
+GSM734169	58.45	0	58.45	no recurrence
+GSM734170	52.14	0	52.14	no recurrence
+GSM734171	102.44	0	64.86	no recurrence
+GSM734172	49.87	0	36.75	no recurrence
+GSM734173	15.28	1	NA	NA
+GSM734174	54.54	0	26.92	no recurrence
+GSM734175	11.76	1	8.21	recurrence
